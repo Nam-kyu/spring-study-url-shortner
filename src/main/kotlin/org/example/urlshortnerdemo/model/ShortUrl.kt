@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.ZonedDateTime
 import java.util.Date
 
 @Entity
@@ -20,18 +21,18 @@ data class ShortUrl (
     var originalUrl: String,
     @Column(name = "created_at", updatable = false, nullable = false)
     @CreatedDate
-    var createdAt: Date,
+    var createdAt: ZonedDateTime,
     @Column(name = "updated_at")
     @LastModifiedDate
-    var updatedAt: Date,
+    var updatedAt: ZonedDateTime,
     @Column(name = "expires_at")
-    var expiresAt: Date? = null,
+    var expiresAt: ZonedDateTime? = null,
 ) {
     constructor(shortId: String, originalUrl: String) : this(
         null,
         shortId,
         originalUrl,
-        Date(),
-        Date()
+        ZonedDateTime.now(),
+        ZonedDateTime.now()
     )
 }
