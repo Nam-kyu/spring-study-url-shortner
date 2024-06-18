@@ -1,10 +1,8 @@
 package org.example.urlshortnerdemo.controller
 
-import jakarta.servlet.http.HttpServletResponse
-import jakarta.websocket.server.PathParam
 import org.example.urlshortnerdemo.controller.request.CreateShortLinkRequest
-import org.example.urlshortnerdemo.controller.response.CreateShortLinkResponse
-import org.example.urlshortnerdemo.model.ShortUrl
+import org.example.urlshortnerdemo.controller.response.ShortLinkResponse
+import org.example.urlshortnerdemo.exceptions.NotFoundException
 import org.example.urlshortnerdemo.service.ShortUrlService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,18 +11,24 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/short-links")
 class ShortUrlController(val service: ShortUrlService) {
     @PostMapping("")
-    fun createShortLinks(@RequestBody data: CreateShortLinkRequest): CreateShortLinkResponse {
+    fun createShortLinks(@RequestBody data: CreateShortLinkRequest): ShortLinkResponse {
         val shortUrl = service.createShortUrl(data.url)
-        return CreateShortLinkResponse(
+        return ShortLinkResponse(
             shortUrlId = shortUrl.shortId,
             url = shortUrl.originalUrl,
             createdAt = shortUrl.createdAt
         )
     }
 
-    @GetMapping("/{id}")
-    fun getTest(@PathVariable id: String): String {
-        return "Hello World $id"
+    @GetMapping("/{shortUrlId}")
+    fun getShortUrl(@PathVariable shortUrlId: String): ShortLinkResponse {
+        val shortUrl = service.getShortUrl(shortUrlId) ?: throw NotFoundException()
+
+        return ShortLinkResponse(
+            shortUrlId = shortUrl.shortId,
+            url = shortUrl.originalUrl,
+            createdAt = shortUrl.createdAt
+        )
     }
 
     @GetMapping("/redirect/{id}")

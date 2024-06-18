@@ -15,8 +15,8 @@ class ShortUrlService(val repository: ShortUrlRepository) {
         return repository.save(shortUrl)
     }
 
-    fun findByShortId(id: Long): Optional<ShortUrl> {
-        return repository.findById(id)
+    fun getShortUrl(shortUrlId: String): ShortUrl? {
+        return repository.findByShortId(shortUrlId)
     }
 
     fun findShortUrls(): List<ShortUrl> {

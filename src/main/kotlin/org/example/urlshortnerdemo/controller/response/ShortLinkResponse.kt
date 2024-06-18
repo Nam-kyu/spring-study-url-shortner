@@ -2,7 +2,7 @@ package org.example.urlshortnerdemo.controller.response
 
 import java.time.ZonedDateTime
 
-data class CreateShortLinkResponse (
+data class ShortLinkResponse (
     val shortUrlId: String,
     val url: String,
     val createdAt: ZonedDateTime,
