@@ -20,7 +20,20 @@ class ShortUrlServiceTest : FunSpec({
         shortUrl.shortId shouldBe "123456"
     }
 
-    test("findByShortId") { }
+    test("getShortUrl") {
+        every { repository.findByShortId("123456") } returns ShortUrl(originalUrl = "https://www.google.com", shortId = "123456")
 
-    test("findShortUrls") { }
+        val shortUrl = service.getShortUrl(shortUrlId = "123456")
+
+        shortUrl?.originalUrl shouldBe "https://www.google.com"
+        shortUrl?.shortId shouldBe "123456"
+    }
+
+    test("getShortUrl with invalid shortUrlId") {
+        every { repository.findByShortId("123456") } returns null
+
+        val shortUrl = service.getShortUrl(shortUrlId = "123456")
+
+        shortUrl shouldBe null
+    }
 })
